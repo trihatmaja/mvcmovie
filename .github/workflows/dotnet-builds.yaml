@@ -76,9 +76,9 @@ jobs:
           path: ./publish
 
       - name: Deploy to IIS
-        shell: pwsh
+        shell: powershell
         run: |
-          $IISPath = "C:\inetpub\wwwroot\mvcmovie"   # ganti sesuai folder IIS kamu
+          $IISPath = "C:\inetpub\wwwroot\mvcmovie"
           if (Test-Path $IISPath) {
             Get-ChildItem $IISPath -Recurse | Remove-Item -Recurse -Force
           } else {
@@ -86,6 +86,6 @@ jobs:
           }
           Copy-Item ./publish/* $IISPath -Recurse -Force
       - name: Restart IIS
-        shell: pwsh
+        shell: powershell
         run: iisreset
 
