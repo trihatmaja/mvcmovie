@@ -74,18 +74,22 @@ jobs:
         with:
           name: dotnet-publish
           path: ./publish
-
-      - name: Deploy to IIS
+      - name: Stop IIS app pool
         shell: powershell
         run: |
-          $IISPath = "C:\inetpub\wwwroot\mvcmovie"
-          if (Test-Path $IISPath) {
-            Get-ChildItem $IISPath -Recurse | Remove-Item -Recurse -Force
-          } else {
+          Import-Module WebAdministration
+          Stop-WebAppPool -Name 'mvcmovie'
+      - name: Copy published files to IIS folder (overwrite)
+        shell: powershell
+        run: |
+          $IISPath = "C:\inetpub\wwwroot\yourapp"
+          if (-not (Test-Path $IISPath)) {
             New-Item -ItemType Directory -Path $IISPath
           }
           Copy-Item ./publish/* $IISPath -Recurse -Force
-      - name: Restart IIS
+      - name: Start IIS app pool
         shell: powershell
-        run: iisreset
+        run: |
+          Import-Module WebAdministration
+          Start-WebAppPool -Name 'mvcmovie'
 
