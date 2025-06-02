@@ -1,0 +1,68 @@
+name: Build, Publish .NET, Dockerize (Kaniko), and Push
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-push:
+    runs-on: self-hosted
+
+    steps:
+      # 1. Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Setup .NET
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      # 3. Restore dependencies
+      - name: Restore dependencies
+        run: dotnet restore
+
+      # 4. Build
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      # 5. Test
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+
+      # 6. Publish output to folder
+      - name: Publish
+        run: dotnet publish --configuration Release --output ./publish
+
+      # 7. Upload artifact
+      - name: Upload published app as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dotnet-publish
+          path: ./publish
+
+      # 8. Prepare docker config
+      - name: Prepare Docker config
+        run: |
+          mkdir -p /tmp/.docker
+          echo '{"auths":{"https://index.docker.io/v1/":{"username":"${{ secrets.DOCKER_USERNAME }}","password":"${{ secrets.DOCKER_PASSWORD }}"}}}' > /tmp/.docker/config.json
+
+      # 9. Build and push docker
+      - name: Build and Push Docker image with Kaniko (latest & short-sha)
+        uses: addnab/docker-run-action@v3
+        with:
+          image: gcr.io/kaniko-project/executor:latest
+          options: >
+            -v ${{ github.workspace }}:/workspace
+            -v /tmp/.docker:/kaniko/.docker
+          run: |
+            SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-8)
+            REPO_NAME=$(basename "${{ github.repository }}")
+            IMAGE="docker.io/${{ secrets.DOCKER_USERNAME }}/${REPO_NAME}"
+            /kaniko/executor \
+              --dockerfile=Dockerfile \
+              --context=dir:///workspace \
+              --destination=${IMAGE}:latest \
+              --destination=${IMAGE}:${SHORT_SHA}
+
