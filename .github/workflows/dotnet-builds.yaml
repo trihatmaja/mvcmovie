@@ -32,7 +32,7 @@ jobs:
 
       # 6. Publish output to folder
       - name: Publish
-        run: dotnet publish -c Release -r win-x64 --self-contained false -o ./publish
+        run: dotnet publish -c Release -r win-x64 --self-contained false -o ./out
 
       # 7. Upload artifact
       - name: Upload published app as artifact
@@ -41,13 +41,7 @@ jobs:
           name: dotnet-publish
           path: ./publish
 
-      # 8. Install img
-      - name: Install img
-        run: |
-          curl -sSL https://github.com/genuinetools/img/releases/download/v0.5.11/img-linux-amd64 -o /usr/local/bin/img
-          chmod +x /usr/local/bin/img
-
-      # 9. Build & push docker
+      # 8. Build & push docker
       - name: Log in to DockerHub
         uses: docker/login-action@v3
         with:
