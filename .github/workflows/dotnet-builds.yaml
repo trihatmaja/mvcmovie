@@ -48,26 +48,27 @@ jobs:
           chmod +x /usr/local/bin/img
 
       # 9. Build & push docker
-      - name: Build and Push Docker image with img (latest & short-sha)
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Log in to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and tag Docker image
         run: |
           SHORT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-8)
           REPO_NAME=$(basename "${GITHUB_REPOSITORY}")
-          IMAGE="docker.io/${DOCKER_USERNAME}/${REPO_NAME}"
+          IMAGE="docker.io/${{ secrets.DOCKER_USERNAME }}/${REPO_NAME}"
+          docker build -t "${IMAGE}:latest" .
+          docker tag "${IMAGE}:latest" "${IMAGE}:${SHORT_SHA}"
 
-          # login to Docker Hub
-          echo "${DOCKER_PASSWORD}" | img login -u "${DOCKER_USERNAME}" --password-stdin
-
-          # build and tag
-          ls -la
-          img build -t "${IMAGE}:latest" .
-          img tag "${IMAGE}:latest" "${IMAGE}:${SHORT_SHA}"
-
-          # push both tags
-          img push "${IMAGE}:latest"
-          img push "${IMAGE}:${SHORT_SHA}"
+      - name: Push Docker image (both tags)
+        run: |
+          SHORT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-8)
+          REPO_NAME=$(basename "${GITHUB_REPOSITORY}")
+          IMAGE="docker.io/${{ secrets.DOCKER_USERNAME }}/${REPO_NAME}"
+          docker push "${IMAGE}:latest"
+          docker push "${IMAGE}:${SHORT_SHA}"
 
   deploy:
     name: Deploy to IIS
