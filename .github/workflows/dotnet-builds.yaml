@@ -41,29 +41,32 @@ jobs:
           name: dotnet-publish
           path: ./publish
 
-      # 8. Prepare docker config
-      - name: Prepare Docker config
+      # 8. Install img
+      - name: Install img
         run: |
-          mkdir -p /tmp/.docker
-          echo '{"auths":{"https://index.docker.io/v1/":{"username":"${{ secrets.DOCKER_USERNAME }}","password":"${{ secrets.DOCKER_PASSWORD }}"}}}' > /tmp/.docker/config.json
+          curl -sSL https://github.com/genuinetools/img/releases/download/v0.5.11/img-linux-amd64 -o /usr/local/bin/img
+          chmod +x /usr/local/bin/img
 
-      # 9. Build and push docker
-      - name: Build and Push Docker image with Kaniko (latest & short-sha)
-        uses: addnab/docker-run-action@v3
-        with:
-          image: gcr.io/kaniko-project/executor:latest
-          options: >
-            -v ${{ github.workspace }}:/workspace
-            -v /tmp/.docker:/kaniko/.docker
-          run: |
-            SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-8)
-            REPO_NAME=$(basename "${{ github.repository }}")
-            IMAGE="docker.io/${{ secrets.DOCKER_USERNAME }}/${REPO_NAME}"
-            /kaniko/executor \
-              --dockerfile=Dockerfile \
-              --context=dir:///workspace \
-              --destination=${IMAGE}:latest \
-              --destination=${IMAGE}:${SHORT_SHA}
+      # 9. Build & push docker
+      - name: Build and Push Docker image with img (latest & short-sha)
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          SHORT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-8)
+          REPO_NAME=$(basename "${GITHUB_REPOSITORY}")
+          IMAGE="docker.io/${DOCKER_USERNAME}/${REPO_NAME}"
+
+          # login to Docker Hub
+          echo "${DOCKER_PASSWORD}" | img login -u "${DOCKER_USERNAME}" --password-stdin
+
+          # build and tag
+          img build -t "${IMAGE}:latest" .
+          img tag "${IMAGE}:latest" "${IMAGE}:${SHORT_SHA}"
+
+          # push both tags
+          img push "${IMAGE}:latest"
+          img push "${IMAGE}:${SHORT_SHA}"
 
   deploy:
     name: Deploy to IIS
