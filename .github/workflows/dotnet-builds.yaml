@@ -77,7 +77,7 @@ jobs:
           name: dotnet-publish
           path: ./publish
       - name: Deploy to IIS (Stop/Deploy/Start)
-        shell: pwsh
+        shell: powershell
         run: |
           $repoName = $env:GITHUB_REPOSITORY.Split("/")[1]
           $iisPath = "C:\inetpub\wwwroot\$repoName"
