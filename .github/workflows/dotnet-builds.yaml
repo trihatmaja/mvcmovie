@@ -76,25 +76,36 @@ jobs:
         with:
           name: dotnet-publish
           path: ./publish
-      - name: Stop IIS app pool
-        shell: powershell
+      - name: Deploy to IIS (Stop/Deploy/Start)
+        shell: pwsh
         run: |
-          $APP_NAME = $env:GITHUB_REPOSITORY.Split("/")[1]
-          Import-Module WebAdministration
-          Stop-WebAppPool -Name $APP_NAME
-      - name: Copy published files to IIS folder (overwrite)
-        shell: powershell
-        run: |
-          $APP_NAME = $env:GITHUB_REPOSITORY.Split("/")[1]
-          $IISPath = "C:\inetpub\wwwroot\$APP_NAME"
-          if (-not (Test-Path $IISPath)) {
-            New-Item -ItemType Directory -Path $IISPath
-          }
-          Copy-Item ./publish/* $IISPath -Recurse -Force
-      - name: Start IIS app pool
-        shell: powershell
-        run: |
-          $APP_NAME = $env:GITHUB_REPOSITORY.Split("/")[1]
-          Import-Module WebAdministration
-          Start-WebAppPool -Name $APP_NAME
+          $repoName = $env:GITHUB_REPOSITORY.Split("/")[1]
+          $iisPath = "C:\inetpub\wwwroot\$repoName"
+          $siteName = $repoName
+          $appPoolName = $repoName
 
+          Import-Module WebAdministration
+
+          # Stop site dan app pool
+          if (Get-Website -Name $siteName -ErrorAction SilentlyContinue) {
+            Stop-Website -Name $siteName
+          }
+          if (Get-WebAppPoolState -Name $appPoolName -ErrorAction SilentlyContinue) {
+            Stop-WebAppPool -Name $appPoolName
+          }
+
+          # Deploy file
+          if (Test-Path $iisPath) {
+            Remove-Item "$iisPath\*" -Recurse -Force
+          } else {
+            New-Item -Path $iisPath -ItemType Directory
+          }
+          Copy-Item -Path ./publish/* -Destination $iisPath -Recurse -Force
+
+          # Start app pool dan site
+          if (Get-WebAppPoolState -Name $appPoolName -ErrorAction SilentlyContinue) {
+            Start-WebAppPool -Name $appPoolName
+          }
+          if (Get-Website -Name $siteName -ErrorAction SilentlyContinue) {
+            Start-Website -Name $siteName
+          }
