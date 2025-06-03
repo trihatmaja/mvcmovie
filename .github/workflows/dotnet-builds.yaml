@@ -93,11 +93,9 @@ jobs:
           if (Get-WebAppPoolState -Name $appPoolName -ErrorAction SilentlyContinue) {
             Stop-WebAppPool -Name $appPoolName
           }
-
+          
           # Deploy file
-          if (Test-Path $iisPath) {
-            Remove-Item "$iisPath\*" -Recurse -Force
-          } else {
+          if (-not (Test-Path $iisPath)) {
             New-Item -Path $iisPath -ItemType Directory
           }
           Copy-Item -Path ./publish/* -Destination $iisPath -Recurse -Force
