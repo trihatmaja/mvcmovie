@@ -82,7 +82,7 @@ jobs:
       - name: Copy published files to IIS folder (overwrite)
         shell: powershell
         run: |
-          $IISPath = "C:\inetpub\wwwroot\yourapp"
+          $IISPath = "C:\inetpub\wwwroot\mvcmovie"
           if (-not (Test-Path $IISPath)) {
             New-Item -ItemType Directory -Path $IISPath
           }
