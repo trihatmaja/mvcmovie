@@ -1,6 +1,18 @@
-using Prometheus;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Tambahkan OpenTelemetry Metrics
+builder.Services.AddOpenTelemetry()
+    .WithMetrics(metrics =>
+    {
+        metrics
+            .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("mvcmovie"))
+            .AddAspNetCoreInstrumentation()
+            .AddRuntimeInstrumentation()
+            .AddPrometheusExporter(); // Ini yang expose /metrics untuk Prometheus
+    });
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -24,15 +36,10 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}")
-        .WithStaticAssets();
-    // endpoint metrics
-    endpoints.MapMetrics(); // expose di /metrics
-});
+ app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}")
+    .WithStaticAssets();
 
-
+app.MapPrometheusScrapingEndpoint(); // expose di /metrics (default)
 app.Run();
