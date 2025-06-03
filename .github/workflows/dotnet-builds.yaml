@@ -79,13 +79,13 @@ jobs:
       - name: Stop IIS app pool
         shell: powershell
         run: |
-          $APP_NAME = $(basename "${GITHUB_REPOSITORY}")
+          $APP_NAME = $env:GITHUB_REPOSITORY.Split("/")[1]
           Import-Module WebAdministration
           Stop-WebAppPool -Name $APP_NAME
       - name: Copy published files to IIS folder (overwrite)
         shell: powershell
         run: |
-          $APP_NAME = $(basename "${GITHUB_REPOSITORY}")
+          $APP_NAME = $env:GITHUB_REPOSITORY.Split("/")[1]
           $IISPath = "C:\inetpub\wwwroot\$APP_NAME"
           if (-not (Test-Path $IISPath)) {
             New-Item -ItemType Directory -Path $IISPath
@@ -94,7 +94,7 @@ jobs:
       - name: Start IIS app pool
         shell: powershell
         run: |
-          $APP_NAME = $(basename "${GITHUB_REPOSITORY}")
+          $APP_NAME = $env:GITHUB_REPOSITORY.Split("/")[1]
           Import-Module WebAdministration
           Start-WebAppPool -Name $APP_NAME
 
