@@ -67,10 +67,10 @@ jobs:
           # push both tags
           img push "${IMAGE}:latest"
           img push "${IMAGE}:${SHORT_SHA}"
-          
+
   deploy:
     name: Deploy to IIS
-    needs: build-and-push         # <- hanya jalan jika build sukses
+    needs: build-and-push
     runs-on: [self-hosted, Windows, deploy-iis]
     steps:
       - name: Download published artifact
@@ -82,11 +82,11 @@ jobs:
         shell: powershell
         run: |
           Import-Module WebAdministration
-          Stop-WebAppPool -Name 'mvcmovie'
+          Stop-WebAppPool -Name '$(basename "${GITHUB_REPOSITORY}")'
       - name: Copy published files to IIS folder (overwrite)
         shell: powershell
         run: |
-          $IISPath = "C:\inetpub\wwwroot\mvcmovie"
+          $IISPath = "C:\inetpub\wwwroot\$(basename "${GITHUB_REPOSITORY}")"
           if (-not (Test-Path $IISPath)) {
             New-Item -ItemType Directory -Path $IISPath
           }
@@ -95,5 +95,5 @@ jobs:
         shell: powershell
         run: |
           Import-Module WebAdministration
-          Start-WebAppPool -Name 'mvcmovie'
+          Start-WebAppPool -Name '$(basename "${GITHUB_REPOSITORY}")'
 
