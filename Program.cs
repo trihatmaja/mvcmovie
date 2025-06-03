@@ -1,4 +1,5 @@
 using OpenTelemetry.Metrics;
+using OpenTelemetry.Trace;
 using OpenTelemetry.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,18 @@ builder.Services.AddOpenTelemetry()
             .AddAspNetCoreInstrumentation()
             .AddRuntimeInstrumentation()
             .AddPrometheusExporter(); // Ini yang expose /metrics untuk Prometheus
+    })
+    .WithTracing(tracing =>
+    {
+        tracing
+            .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("mvcmovie"))
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation()
+            .AddJaegerExporter(options =>
+            {
+                options.AgentHost = "localhost";
+                options.AgentPort = 6831;
+            });
     });
 
 // Add services to the container.
