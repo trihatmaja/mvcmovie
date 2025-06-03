@@ -61,6 +61,7 @@ jobs:
           echo "${DOCKER_PASSWORD}" | img login -u "${DOCKER_USERNAME}" --password-stdin
 
           # build and tag
+          ls -la
           img build -t "${IMAGE}:latest" .
           img tag "${IMAGE}:latest" "${IMAGE}:${SHORT_SHA}"
 
