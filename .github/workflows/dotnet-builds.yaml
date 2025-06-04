@@ -93,7 +93,10 @@ jobs:
           if (Get-WebAppPoolState -Name $appPoolName -ErrorAction SilentlyContinue) {
             Stop-WebAppPool -Name $appPoolName
           }
-          
+
+          # Wait 
+          Start-Sleep -Seconds 2  # Tunggu minimal 2-5 detik
+
           # Deploy file
           if (-not (Test-Path $iisPath)) {
             New-Item -Path $iisPath -ItemType Directory
