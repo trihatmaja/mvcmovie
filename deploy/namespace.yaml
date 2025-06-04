@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mvcmovie
+  labels:
+    name: mvcmovie
+    env: poc
+    pic: wicaksono trihatmaja

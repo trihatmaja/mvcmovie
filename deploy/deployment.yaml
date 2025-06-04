@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mvcmovie
+  labels:
+    app: mvcmovie
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mvcmovie
+  template:
+    metadata:
+      labels:
+        app: mvcmovie
+    spec:
+      containers:
+      - name: mvcmovie
+        image: mvcmovie:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: ENVIRONMENT
+          value: "production"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "250m"
+      nodeSelector:
+        node-role: gpu-node
+      # Affinity: preferensi penjadwalan pod
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                - app: mvcmovie
+              
