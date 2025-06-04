@@ -95,7 +95,7 @@ jobs:
           }
 
           # Wait 
-          Start-Sleep -Seconds 2  # Tunggu minimal 2-5 detik
+          Start-Sleep -Seconds 10 # Tunggu minimal 2-5 detik
 
           # Deploy file
           if (-not (Test-Path $iisPath)) {
