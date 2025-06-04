@@ -4,6 +4,8 @@ using OpenTelemetry.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHealthChecks();
+
 // Tambahkan OpenTelemetry Metrics
 builder.Services.AddOpenTelemetry()
     .WithMetrics(metrics =>
@@ -53,4 +55,7 @@ app.MapStaticAssets();
     .WithStaticAssets();
 
 app.MapPrometheusScrapingEndpoint(); // expose di /metrics (default)
+
+app.MapHealthChecks("/healthz");
+
 app.Run();
