@@ -10,9 +10,7 @@ builder.Services.AddHealthChecks();
 Env.Load();
 
 string TracingAgentHost = Environment.GetEnvironmentVariable("TRACING_AGENT_HOST");
-int TracingAgentPort = int.Parse(Environment.GetEnvironmentVariable("TRACING_AGENT_PORT"))
-
-
+int TracingAgentPort = int.Parse(Environment.GetEnvironmentVariable("TRACING_AGENT_PORT"));
 
 // Tambahkan OpenTelemetry Metrics
 builder.Services.AddOpenTelemetry()
