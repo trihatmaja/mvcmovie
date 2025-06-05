@@ -15,7 +15,7 @@ builder.Services.AddHealthChecks();
 string TracingAgentHost = Environment.GetEnvironmentVariable("TRACING_AGENT_HOST");
 int TracingAgentPort = int.Parse(Environment.GetEnvironmentVariable("TRACING_AGENT_PORT"));
 
-var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRINGS")
+var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRINGS");
 
 builder.Services.AddDbContext<MvcMovieContext>(options =>
     options.UseSqlServer(connectionString));
