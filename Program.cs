@@ -1,10 +1,18 @@
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using OpenTelemetry.Resources;
+using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHealthChecks();
+
+Env.Load();
+
+string TracingAgentHost = Environment.GetEnvironmentVariable("TRACING_AGENT_HOST");
+int TracingAgentPort = int.Parse(Environment.GetEnvironmentVariable("TRACING_AGENT_PORT"))
+
+
 
 // Tambahkan OpenTelemetry Metrics
 builder.Services.AddOpenTelemetry()
@@ -24,8 +32,8 @@ builder.Services.AddOpenTelemetry()
             .AddHttpClientInstrumentation()
             .AddJaegerExporter(options =>
             {
-                options.AgentHost = "localhost";
-                options.AgentPort = 6831;
+                options.AgentHost = TracingAgentHost;
+                options.AgentPort = TracingAgentPort;
             });
     });
 
