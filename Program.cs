@@ -2,15 +2,23 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using OpenTelemetry.Resources;
 using DotNetEnv;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using MvcMovie.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddHealthChecks();
-
 Env.Load();
+
+builder.Services.AddHealthChecks();
 
 string TracingAgentHost = Environment.GetEnvironmentVariable("TRACING_AGENT_HOST");
 int TracingAgentPort = int.Parse(Environment.GetEnvironmentVariable("TRACING_AGENT_PORT"));
+
+var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRINGS")
+
+builder.Services.AddDbContext<MvcMovieContext>(options =>
+    options.UseSqlServer(connectionString));
 
 // Tambahkan OpenTelemetry Metrics
 builder.Services.AddOpenTelemetry()
