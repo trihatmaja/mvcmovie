@@ -5,7 +5,7 @@ metadata:
   labels:
     app: mvcmovie
     env: poc
-    pic: wicaksono trihatmaja
+    pic: wicaksonotrihatmaja
 spec:
   type: ClusterIP
   selector:

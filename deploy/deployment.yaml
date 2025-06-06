@@ -5,7 +5,7 @@ metadata:
   labels:
     app: mvcmovie
     env: poc
-    pic: wicaksono trihatmaja
+    pic: wicaksonotrihatmaja
 spec:
   replicas: 2
   selector:
@@ -49,7 +49,8 @@ spec:
       affinity:
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchLabels:
-                - app: mvcmovie
+          - weight: 1
+            preference:
+            matchExpressions:
+              app: mvcmovie
               
