@@ -118,4 +118,4 @@ jobs:
     - uses: tale/kubectl-action@v1
       with:
         base64-kube-config: ${{ secrets.KUBE_CONFIG }}
-    - run: kubectl get pods -n mvcmovie
+    - run: kubectl apply -f deploy/* && kubectl rollout status deployment/mvcmovie
