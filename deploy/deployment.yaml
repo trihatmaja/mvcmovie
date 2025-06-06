@@ -51,6 +51,6 @@ spec:
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 1
             preference:
-            matchExpressions:
-              app: mvcmovie
+              matchExpressions:
+                app: mvcmovie
               
