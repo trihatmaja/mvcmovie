@@ -1,3 +1,0 @@
-image:
-  name: trihatmaja/mvcmovie
-  newTag: ${SHORT_SHA}

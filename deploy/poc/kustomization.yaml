@@ -1,6 +1,10 @@
 resources:
   - ../base
 
+images:
+  name: trihatmaja/mvcmovie
+  newTag: ${SHORT_SHA}
+
 configMapGenerator:
   - name: mvcmovie-config
     behavior: replace
@@ -13,6 +17,3 @@ secretGenerator:
     envs:
       - secrets.env
     type: Opaque
-
-patches:
-  - path: ./deployment-patch.yaml    # optional: override deployment spesifik
