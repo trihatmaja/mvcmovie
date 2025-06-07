@@ -1,0 +1,16 @@
+resources:
+  - ../../base
+
+configMapGenerator:
+  - name: mvcmovie-config
+    envs:
+      - configmap.env
+
+secretGenerator:
+  - name: mvcmovie-secrets
+    envs:
+      - secret.env
+    type: Opaque
+
+patches:
+  - path: deployment-patch.yaml    # optional: override deployment spesifik

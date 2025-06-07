@@ -117,12 +117,15 @@ jobs:
     steps:
     - name: generate-secrets
       run: |
-        echo ${{ secrets.CONNECTION_STRINGS }} > secrets.env
+        echo CONNECTION_STRINGS=${{ secrets.CONNECTION_STRINGS }} > deploy/base/secrets.env
+    - name: Patch image tag
+        run: |
+          SHORT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-8)
+          sed -i "s|newTag: .*|newTag: ${SHORT_SHA}|" deploy/poc/kustomization.yaml
     - name: apply-manifest
       uses: tale/kubectl-action@v1
       with:
         base64-kube-config: ${{ secrets.KUBE_CONFIG }}
-    - run: |
-        kubectl apply secret generic mvcmovie-secrets -n mvcmovie --from-file=secrets.env
-        kubectl apply -f deploy/
+      run: |
+        kubectl apply -k deploy/poc
         kubectl rollout status deployment/mvcmovie

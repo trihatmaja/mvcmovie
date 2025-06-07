@@ -1,0 +1,15 @@
+resources:
+  - namespace.yaml
+  - service.yaml
+  - deployment.yaml
+
+configMapGenerator:
+  - name: mvcmovie-config
+    envs:
+      - configmap.env
+
+secretGenerator:
+  - name: mvcmovie-secrets
+    envs:
+      - secrets.env
+    type: Opaque
