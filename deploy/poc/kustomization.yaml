@@ -1,5 +1,5 @@
 resources:
-  - ../deploy/base
+  - ../base
 
 configMapGenerator:
   - name: mvcmovie-config
