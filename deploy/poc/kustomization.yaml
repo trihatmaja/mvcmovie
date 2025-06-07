@@ -1,9 +1,9 @@
 resources:
   - ../base
 
-image:
-  name: trihatmaja/mvcmovie
-  newTag: ${SHORT_SHA}
+images:
+  - name: trihatmaja/mvcmovie
+    newTag: ${SHORT_SHA}
 
 configMapGenerator:
   - name: mvcmovie-config
