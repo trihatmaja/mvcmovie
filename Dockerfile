@@ -13,4 +13,4 @@ FROM mcr.microsoft.com/dotnet/aspnet:9.0-noble-chiseled-extra-amd64
 WORKDIR /App
 COPY --from=build /App/out .
 EXPOSE 8080
-ENTRYPOINT ["MvcMovie"]
+ENTRYPOINT ["dotnet", "MvcMovie.dll"]
