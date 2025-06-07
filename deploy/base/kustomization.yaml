@@ -1,3 +1,5 @@
+namespace: mvcmovie
+
 resources:
   - namespace.yaml
   - service.yaml
