@@ -13,7 +13,7 @@ FROM alpine:latest
 WORKDIR /App
 COPY --from=build /App/out .
 RUN apk update && \
-    apk add --no-cache libstdc++ libgcc && \
+    apk add --no-cache libstdc++ libgcc icu-libs && \
     addgroup -g 1001 appgroup && \
     adduser -D -u 1001 -G appgroup appuser && \
     chown -R appuser:appgroup /App
