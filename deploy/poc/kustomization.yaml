@@ -15,4 +15,4 @@ secretGenerator:
     type: Opaque
 
 patches:
-  - path: deploy/poc/deployment-patch.yaml    # optional: override deployment spesifik
+  - path: ./deployment-patch.yaml    # optional: override deployment spesifik
