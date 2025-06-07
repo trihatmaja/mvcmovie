@@ -121,7 +121,7 @@ jobs:
     - name: Patch image tag
       run: |
         SHORT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-8)
-        sed -i "s|newTag: .*|newTag: ${SHORT_SHA}|" deploy/poc/kustomization.yaml
+        sed -i "s|<<SHORT_SHA>>|${SHORT_SHA}|" deploy/poc/kustomization.yaml
     - name: apply-manifest
       uses: tale/kubectl-action@v1
       with:

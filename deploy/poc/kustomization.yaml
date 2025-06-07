@@ -3,13 +3,15 @@ resources:
 
 images:
   - name: trihatmaja/mvcmovie
-    newTag: ${SHORT_SHA}
+    newTag: <<SHORT_SHA>>
 
 configMapGenerator:
   - name: mvcmovie-config
     behavior: replace
     envs:
       - configmap.env
+    labels:
+      - version: <<SHORT_SHA>>
 
 secretGenerator:
   - name: mvcmovie-secrets
@@ -17,3 +19,5 @@ secretGenerator:
     envs:
       - secrets.env
     type: Opaque
+    labels:
+      - version: <<SHORT_SHA>>
