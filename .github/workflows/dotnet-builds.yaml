@@ -119,9 +119,9 @@ jobs:
       run: |
         echo CONNECTION_STRINGS=${{ secrets.CONNECTION_STRINGS }} > deploy/base/secrets.env
     - name: Patch image tag
-        run: |
-          SHORT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-8)
-          sed -i "s|newTag: .*|newTag: ${SHORT_SHA}|" deploy/poc/kustomization.yaml
+      run: |
+        SHORT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-8)
+        sed -i "s|newTag: .*|newTag: ${SHORT_SHA}|" deploy/poc/kustomization.yaml
     - name: apply-manifest
       uses: tale/kubectl-action@v1
       with:
