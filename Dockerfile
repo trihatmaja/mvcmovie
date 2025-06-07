@@ -6,17 +6,12 @@ COPY . ./
 # Restore as distinct layers
 RUN dotnet restore
 # Build and publish a release
-RUN dotnet publish -c Release -r linux-musl-x64 --self-contained true -o out
+RUN dotnet publish -c Release -o out
 
 # Build runtime image
-FROM alpine:latest
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-distroless-amd64 
 WORKDIR /App
 COPY --from=build /App/out .
-RUN apk add --no-cache libstdc++ libgcc icu-libs && \
-    addgroup -g 1001 appgroup && \
-    adduser -D -u 1001 -G appgroup appuser && \
-    chown -R appuser:appgroup /App
-
-USER appuser
+USER nonroot
 EXPOSE 8080
 ENTRYPOINT ["./MvcMovie"]
