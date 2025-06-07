@@ -32,7 +32,7 @@ jobs:
 
       # 6. Publish output to folder
       - name: Publish
-        run: dotnet publish -c Release -r win-x64 --self-contained false -o ./publish
+        run: dotnet publish -c Release -r win-x64 --self-contained false -o ./publish # publish untuk IIS
 
       # 7. Upload artifact
       - name: Upload published app as artifact

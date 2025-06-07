@@ -6,10 +6,10 @@ COPY . ./
 # Restore as distinct layers
 RUN dotnet restore
 # Build and publish a release
-RUN dotnet publish -o out
+RUN dotnet publish -c Release -r linux-musl-x64 --self-contained true -o out
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:9.0
+FROM alpine:latest
 WORKDIR /App
 COPY --from=build /App/out .
-ENTRYPOINT ["dotnet", "MvcMovie.dll"]
+ENTRYPOINT ["./MvcMovie"]
