@@ -46,11 +46,4 @@ spec:
               name: mvcmovie-config
           - secretRef:
               name: mvcmovie-secrets
-      # Affinity: preferensi penjadwalan pod
-      podAntiAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchLabels:
-              app: mvcmovie
-          topologyKey: "kubernetes.io/hostname"
               

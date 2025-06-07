@@ -4,5 +4,5 @@ metadata:
   name: mvcmovie-config
   namespace: mvcmovie
 data:
-  TRACING_AGENT_HOST: localhost
-  TRACING_AGENT_PORT: 6799
+  TRACING_AGENT_HOST: "localhost"
+  TRACING_AGENT_PORT: "6799"
