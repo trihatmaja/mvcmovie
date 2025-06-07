@@ -126,6 +126,6 @@ jobs:
       uses: tale/kubectl-action@v1
       with:
         base64-kube-config: ${{ secrets.KUBE_CONFIG }}
-      run: |
+    - run: |
         kubectl apply -k deploy/poc
         kubectl rollout status deployment/mvcmovie
