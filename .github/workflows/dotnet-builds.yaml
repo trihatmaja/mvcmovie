@@ -128,4 +128,4 @@ jobs:
         base64-kube-config: ${{ secrets.KUBE_CONFIG }}
     - run: |
         kubectl apply -k deploy/poc
-        kubectl rollout status deployment/mvcmovie
+        kubectl rollout status deployment/mvcmovie -n mvcmovie
