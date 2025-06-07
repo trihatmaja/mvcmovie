@@ -12,11 +12,11 @@ RUN dotnet publish -c Release -r linux-musl-x64 --self-contained true -o out
 FROM alpine:latest
 WORKDIR /App
 COPY --from=build /App/out .
-RUN apk update && \
-    apk add --no-cache libstdc++ libgcc icu-libs && \
+RUN apk add --no-cache libstdc++ libgcc icu-libs && \
     addgroup -g 1001 appgroup && \
     adduser -D -u 1001 -G appgroup appuser && \
     chown -R appuser:appgroup /App
 
 USER appuser
+EXPOSE 8080
 ENTRYPOINT ["./MvcMovie"]
