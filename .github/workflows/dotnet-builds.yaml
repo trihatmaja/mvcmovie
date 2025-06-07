@@ -123,6 +123,6 @@ jobs:
       with:
         base64-kube-config: ${{ secrets.KUBE_CONFIG }}
     - run: |
-        kubectl create secret generic mvcmovie-secrets -n mvcmovie --from-file=secrets.env
+        kubectl apply secret generic mvcmovie-secrets -n mvcmovie --from-file=secrets.env
         kubectl apply -f deploy/
         kubectl rollout status deployment/mvcmovie
