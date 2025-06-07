@@ -9,7 +9,7 @@ configMapGenerator:
 secretGenerator:
   - name: mvcmovie-secrets
     envs:
-      - secret.env
+      - secrets.env
     type: Opaque
 
 patches:

@@ -110,14 +110,14 @@ jobs:
           if (Get-Website -Name $siteName -ErrorAction SilentlyContinue) {
             Start-Website -Name $siteName
           }
-  deploy-k8s:
+  deploy-k8s-poc:
     name: Deploy to k8s
     needs: build-and-push
     runs-on: [self-hosted, Linux]
     steps:
     - name: generate-secrets
       run: |
-        echo CONNECTION_STRINGS=${{ secrets.CONNECTION_STRINGS }} > deploy/base/secrets.env
+        echo CONNECTION_STRINGS=${{ secrets.CONNECTION_STRINGS }} > deploy/poc/secrets.env
     - name: Patch image tag
       run: |
         SHORT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-8)
