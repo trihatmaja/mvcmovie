@@ -12,6 +12,5 @@ RUN dotnet publish -c Release -o out
 FROM mcr.microsoft.com/dotnet/aspnet:9.0-noble-chiseled-extra-amd64
 WORKDIR /App
 COPY --from=build /App/out .
-USER nonroot
 EXPOSE 8080
 ENTRYPOINT ["MvcMovie"]
