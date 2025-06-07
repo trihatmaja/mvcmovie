@@ -11,7 +11,7 @@ configMapGenerator:
     envs:
       - configmap.env
     labels:
-      - version: <<SHORT_SHA>>
+      version: <<SHORT_SHA>>
 
 secretGenerator:
   - name: mvcmovie-secrets
@@ -20,4 +20,4 @@ secretGenerator:
       - secrets.env
     type: Opaque
     labels:
-      - version: <<SHORT_SHA>>
+      version: <<SHORT_SHA>>
