@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mvcmovie
+  namespace: mvcmovie
   labels:
     app: mvcmovie
     env: poc
@@ -18,21 +19,18 @@ spec:
     spec:
       containers:
       - name: mvcmovie
-        image: mvcmovie:latest
+        image: trihatmaja/mvcmovie:latest
         ports:
         - containerPort: 8080
-        env:
-        - name: ENVIRONMENT
-          value: "production"
         livenessProbe:
           httpGet:
-            path: /
+            path: /metrics
             port: 8080
           initialDelaySeconds: 15
           periodSeconds: 20
         readinessProbe:
           httpGet:
-            path: /
+            path: /metrics
             port: 8080
           initialDelaySeconds: 5
           periodSeconds: 10
@@ -43,14 +41,16 @@ spec:
           limits:
             memory: "128Mi"
             cpu: "250m"
-      nodeSelector:
-        node-role: gpu-node
+        envFrom:
+          - configMapRef:
+              name: mvcmovie-config
+          - secretRef:
+              name: mvcmovie-secrets
       # Affinity: preferensi penjadwalan pod
-      affinity:
-        nodeAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            preference:
-              matchExpressions:
-                app: mvcmovie
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchLabels:
+              app: mvcmovie
+          topologyKey: "kubernetes.io/hostname"
               

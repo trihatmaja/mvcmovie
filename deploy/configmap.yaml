@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mvcmovie-config
+  namespace: mvcmovie
+data:
+  TRACING_AGENT_HOST: localhost
+  TRACING_AGENT_PORT: 6799

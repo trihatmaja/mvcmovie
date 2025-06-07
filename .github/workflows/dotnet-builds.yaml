@@ -115,9 +115,14 @@ jobs:
     needs: build-and-push
     runs-on: [self-hosted, Linux]
     steps:
-    - uses: tale/kubectl-action@v1
+    - name: generate-secrets
+      run: |
+        echo ${{ secrets.CONNECTION_STRINGS }} > secrets.env
+    - name: apply-manifest
+      uses: tale/kubectl-action@v1
       with:
         base64-kube-config: ${{ secrets.KUBE_CONFIG }}
     - run: |
+        kubectl create secret generic mvcmovie-secrets -n mvcmovie --from-file=secrets.env
         kubectl apply -f deploy/
         kubectl rollout status deployment/mvcmovie
