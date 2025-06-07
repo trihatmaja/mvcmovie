@@ -3,11 +3,13 @@ resources:
 
 configMapGenerator:
   - name: mvcmovie-config
+    behavior: replace
     envs:
       - configmap.env
 
 secretGenerator:
   - name: mvcmovie-secrets
+    behavior: replace
     envs:
       - secrets.env
     type: Opaque
