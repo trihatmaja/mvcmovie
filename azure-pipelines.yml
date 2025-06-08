@@ -40,18 +40,18 @@ stages:
       inputs:
         targetPath: $(System.DefaultWorkingDirectory)/publish-windows
         artifactName: WebApp-MvcMovie-Windows-x64
-  - stage: BuildDocker
-    displayName: Build and push docker image
-    jobs:
-    - job: BuildDocker
-      displayName: Build Docker
-      steps:
-      - task: Docker@2
-        displayName: Build and push an image to container registry
-        inputs:
-          containerRegistry: 'docker-hub-connection'
-          repository: trihatmaja/mvcmovie
-          command: 'buildAndPush'
-          tags: |
-            azdo-$(Build.SourceVersion)
+- stage: BuildDocker
+  displayName: Build and push docker image
+  jobs:
+  - job: BuildDocker
+    displayName: Build Docker
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        containerRegistry: 'docker-hub-connection'
+        repository: trihatmaja/mvcmovie
+        command: 'buildAndPush'
+        tags: |
+          azdo-$(Build.SourceVersion)
       
