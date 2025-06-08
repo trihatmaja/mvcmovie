@@ -33,11 +33,25 @@ stages:
       displayName: 'dotnet test'
     - task: DotNetCoreCLI@2
       inputs:
-        command: 'publish'
-        arguments: '--configuration Release -r win-x64 --self-contained false -o ./publish'
+        command: 'publish windows'
+        arguments: '--configuration Release -r win-x64 -o ./publish-windows'
       displayName: 'dotnet publish Release'
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: $(System.DefaultWorkingDirectory)/publish
-        artifactName: WebApp-MvcMovie
-    
+        targetPath: $(System.DefaultWorkingDirectory)/publish-windows
+        artifactName: WebApp-MvcMovie-Windows-x64
+  - stage: BuildDocker
+    displayName: Build and push docker image
+    jobs:
+    - job: BuildDocker
+      displayName: Build Docker
+      steps:
+      - task: Docker@2
+        displayName: Build and push an image to container registry
+        inputs:
+          containerRegistry: 'docker-hub-connection'
+          repository: trihatmaja/mvcmovie
+          command: 'buildAndPush'
+          tags: |
+            azdo-$(Build.SourceVersion)
+      
