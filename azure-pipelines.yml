@@ -33,7 +33,7 @@ stages:
       displayName: 'dotnet test'
     - task: DotNetCoreCLI@2
       inputs:
-        command: 'publish windows'
+        command: 'publish'
         arguments: '--configuration Release -r win-x64 -o ./publish-windows'
       displayName: 'dotnet publish Release'
     - task: PublishPipelineArtifact@1
