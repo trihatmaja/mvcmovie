@@ -7,10 +7,10 @@ pool:
   name: 'self-hosted'
 
 stages:
-- stage: Build App
+- stage: BuildApp
   displayName: 'Build App'
   jobs:
-  - job: Build App
+  - job: BuildApp
     displayName: 'Build App'
     steps:
     - task: UseDotNet@2
