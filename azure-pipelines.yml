@@ -1,0 +1,43 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  name: 'self-hosted'
+
+stages:
+- stage: Build App
+  displayName: 'Build App'
+  jobs:
+  - job: Build App
+    displayName: 'Build App'
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Install .NET Core'
+      inputs:
+        version: '9.x'
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'restore'
+      displayName: 'dotnet restore dependency'
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        arguments: '--no-restore --configuration Release'
+      displayName: 'dotnet build Release'
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'test'
+        arguments: '--no-restore --verbosity normal'
+      displayName: 'dotnet test'
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'publish'
+        arguments: '--configuration Release -r win-x64 --self-contained false -o ./publish'
+      displayName: 'dotnet publish Release'
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: $(System.DefaultWorkingDirectory)/publish
+        artifactName: WebApp-MvcMovie
+    
