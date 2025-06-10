@@ -53,7 +53,7 @@ stages:
         img --help
       displayName: 'Install img'
     - script: |
-        echo $(DOCKER_PASSWORD) | img login --username $(DOCKER_USERNAME) --password-stdin 
+        img login index.docker.io -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
         img build -t trihatmaja/mvcmovie:$(Build.SourceVersion) .
         img push trihatmaja/mvcmovie:$(Build.SourceVersion)
       displayName: 'Build and push image using img'
