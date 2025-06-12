@@ -50,6 +50,7 @@ stages:
     displayName: Build Docker
     steps:
     - script: |
+        sudo apt install uidmap libseccomp-dev
         curl -LO https://github.com/genuinetools/img/releases/download/v0.5.11/img-linux-amd64
         chmod +x img-linux-amd64
         sudo mv img-linux-amd64 /usr/local/bin/img
