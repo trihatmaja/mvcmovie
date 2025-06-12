@@ -6,6 +6,9 @@ trigger:
 pool:
   name: 'self-hosted'
 
+variables:
+- group: docker-creds
+
 stages:
 - stage: BuildApp
   displayName: 'Build App'
