@@ -8,6 +8,8 @@ pool:
 
 variables:
 - group: docker-creds
+  PODMAN_VERSION: 'v5.5.1'
+  SHORT_SHA: $(echo $(Build.SourceVersion) | cut -c1-8)
 
 stages:
 - stage: BuildApp
@@ -50,13 +52,12 @@ stages:
     displayName: Build Docker
     steps:
     - script: |
-        curl -LO https://github.com/mgoltzsche/podman-static/releases/download/v5.5.1/podman-linux-amd64.tar.gz
+        curl -LO https://github.com/mgoltzsche/podman-static/releases/download/$(PODMAN_VERSION)/podman-linux-amd64.tar.gz
         tar -xzf podman-linux-amd64.tar.gz
         sudo cp -r podman-linux-amd64/usr podman-linux-amd64/etc /
         podman --version
       displayName: 'Install Podman Binary'
     - script: |
-        export SHORT_SHA=$(echo $(Build.SourceVersion) | cut -c1-8)
         podman login index.docker.io -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
         podman build -t trihatmaja/mvcmovie:$(SHORT_SHA) .
         podman push trihatmaja/mvcmovie:$(SHORT_SHA)
