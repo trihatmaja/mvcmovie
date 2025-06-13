@@ -8,8 +8,10 @@ pool:
 
 variables:
 - group: docker-creds
-  PODMAN_VERSION: 'v5.5.1'
-  SHORT_SHA: $(echo $(Build.SourceVersion) | cut -c1-8)
+- name: PODMAN_VERSION
+  value: 'v5.5.1'
+- name: SHORT_SHA
+  value: $(echo $(Build.SourceVersion) | cut -c1-8)
 
 stages:
 - stage: BuildApp
