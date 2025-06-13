@@ -51,8 +51,8 @@ stages:
     steps:
     - script: |
         curl -LO https://github.com/mgoltzsche/podman-static/releases/download/v5.5.1/podman-linux-amd64.tar.gz
-        tar -xvf podman-linux-amd64.tar.gz
-        sudo mv podman /usr/local/bin/
+        tar -xzf podman-linux-amd64.tar.gz
+        sudo cp -r podman-linux-amd64/usr podman-linux-amd64/etc /
         podman --version
       displayName: 'Install Podman Binary'
     - script: |
