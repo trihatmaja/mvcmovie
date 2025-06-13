@@ -50,8 +50,7 @@ stages:
     displayName: Build Docker
     steps:
     - script: |
-        export PODMAN_VERSION=5.5.1  # sesuaikan versi stabil terbaru
-        curl -LO https://github.com/mgoltzsche/podman-static/releases/download/v$(PODMAN_VERSION)/podman-linux-amd64.tar.gz
+        curl -LO https://github.com/mgoltzsche/podman-static/releases/download/v5.5.1/podman-linux-amd64.tar.gz
         tar -xvf podman-linux-amd64.tar.gz
         sudo mv podman /usr/local/bin/
         podman --version
