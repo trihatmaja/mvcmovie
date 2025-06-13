@@ -50,17 +50,18 @@ stages:
     displayName: Build Docker
     steps:
     - script: |
-        sudo apt install -y uidmap libseccomp-dev
-        curl -LO https://github.com/genuinetools/img/releases/download/v0.5.11/img-linux-amd64
-        chmod +x img-linux-amd64
-        sudo mv img-linux-amd64 /usr/local/bin/img
-        img --help
-      displayName: 'Install img'
+        PODMAN_VERSION=5.5.1  # sesuaikan versi stabil terbaru
+        curl -LO https://github.com/mgoltzsche/podman-static/releases/download/v$(PODMAN_VERSION)/podman-linux-amd64.tar.gz
+        tar -xvf podman-linux-amd64.tar.gz
+        sudo mv podman /usr/local/bin/
+        podman --version
+      displayName: 'Install Podman Binary'
     - script: |
-        img login index.docker.io -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
-        img build -t trihatmaja/mvcmovie:$(Build.SourceVersion) .
-        img push trihatmaja/mvcmovie:$(Build.SourceVersion)
-      displayName: 'Build and push image using img'
+        SHORT_SHA=$(echo $(Build.SourceVersion) | cut -c1-8)
+        podman login index.docker.io -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
+        podman build -t trihatmaja/mvcmovie:$(SHORT_SHA) .
+        podman push trihatmaja/mvcmovie:$(SHORT_SHA)
+      displayName: 'Build and push image using podman'
     # - task: Docker@2
     #   displayName: Build and push an image to container registry
     #   inputs:
