@@ -55,12 +55,14 @@ stages:
         sudo cp -r podman-linux-amd64/usr podman-linux-amd64/etc /
         podman --version
       displayName: 'Install Podman Binary'
+      shell: bash
     - script: |
-        SHORT_SHA=$(echo $(Build.SourceVersion) | cut -c1-8)
+        export SHORT_SHA=$(echo $(Build.SourceVersion) | cut -c1-8)
         podman login index.docker.io -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
         podman build -t trihatmaja/mvcmovie:$(SHORT_SHA) .
         podman push trihatmaja/mvcmovie:$(SHORT_SHA)
       displayName: 'Build and push image using podman'
+      shell: bash
     # - task: Docker@2
     #   displayName: Build and push an image to container registry
     #   inputs:
