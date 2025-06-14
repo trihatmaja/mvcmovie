@@ -54,7 +54,7 @@ stages:
     displayName: Build Docker
     steps:
     - script: |
-        sudo apt update && sudo apt install -y iptables nsenter
+        sudo apt update && sudo apt install -y iptables netavark aardvark-dns
         curl -LO https://github.com/mgoltzsche/podman-static/releases/download/$(PODMAN_VERSION)/podman-linux-amd64.tar.gz
         tar -xzf podman-linux-amd64.tar.gz
         sudo cp -r podman-linux-amd64/usr podman-linux-amd64/etc /
