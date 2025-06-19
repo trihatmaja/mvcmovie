@@ -54,17 +54,15 @@ stages:
     displayName: Build Docker
     steps:
     - script: |
-        sudo apt update && sudo apt install -y iptables
-        curl -LO https://github.com/mgoltzsche/podman-static/releases/download/$(PODMAN_VERSION)/podman-linux-amd64.tar.gz
-        tar -xzf podman-linux-amd64.tar.gz
-        sudo cp -r podman-linux-amd64/usr podman-linux-amd64/etc /
-        podman --version
-      displayName: 'Install Podman Binary'
+        curl -fSL "https://github.com/genuinetools/img/releases/download/v0.5.11/img-linux-amd64" -o "/usr/local/bin/img" \
+        && chmod a+x "/usr/local/bin/img"
+        img -h
+      displayName: 'Install Img Binary'
     - script: |
-        podman login index.docker.io -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
-        podman build -t trihatmaja/mvcmovie:$(SHORT_SHA) .
-        podman push trihatmaja/mvcmovie:$(SHORT_SHA)
-      displayName: 'Build and push image using podman'
+        img login index.docker.io -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
+        img build -t trihatmaja/mvcmovie:$(SHORT_SHA) .
+        img push trihatmaja/mvcmovie:$(SHORT_SHA)
+      displayName: 'Build and push image using Img'
     # - task: Docker@2
     #   displayName: Build and push an image to container registry
     #   inputs:
