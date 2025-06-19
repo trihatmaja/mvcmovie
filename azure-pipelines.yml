@@ -8,10 +8,10 @@ pool:
 
 variables:
 - group: docker-creds
-- name: PODMAN_VERSION
-  value: 'v5.5.1'
 - name: SHORT_SHA
   value: $(echo $(Build.SourceVersion) | cut -c1-8)
+- name: DOCKER_BUILDKIT
+  value: 0
 
 stages:
 - stage: BuildApp
@@ -63,6 +63,8 @@ stages:
         img build -t trihatmaja/mvcmovie:$(SHORT_SHA) .
         img push trihatmaja/mvcmovie:$(SHORT_SHA)
       displayName: 'Build and push image using Img'
+      env:
+        DOCKER_BUILDKIT: $(DOCKER_BUILDKIT)
     # - task: Docker@2
     #   displayName: Build and push an image to container registry
     #   inputs:
