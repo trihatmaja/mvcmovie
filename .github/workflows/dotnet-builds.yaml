@@ -2,7 +2,7 @@ name: Build, Publish .NET, Dockerize (Kaniko), and Push
 
 on:
   push:
-    branches: [main]
+    branches: [test]
 
 jobs:
   build-and-push:
