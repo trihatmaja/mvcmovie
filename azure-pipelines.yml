@@ -47,10 +47,11 @@ stages:
       inputs:
         targetPath: $(System.DefaultWorkingDirectory)/publish-windows
         artifactName: WebApp-MvcMovie-Windows-x64
-    - task: BinskimAnalyze@1
+    - task: MicrosoftSecurityDevOps@1
       displayName: 'Run Binskim analysis'
       inputs:
         # Path ke binary/artifact hasil build
+        tools: 'binskim'
         binariesFolder: $(System.DefaultWorkingDirectory)/publish-windows
 - stage: BuildDocker
   displayName: Build and push docker image
