@@ -53,17 +53,14 @@ stages:
   - job: BuildDocker
     displayName: Build Docker
     steps:
-    - task: DockerInstaller@0
+    - displayName: 'Install docker'
+      task: DockerInstaller@0
       inputs:
         dockerVersion: '28.3.1'
-    - script: |
-        curl -fSL "https://github.com/genuinetools/img/releases/download/v0.5.11/img-linux-amd64" -o "/usr/local/bin/img" \
-        && chmod a+x "/usr/local/bin/img"
-        img -h
-      displayName: 'Install Img Binary'
-    - script: |
+    - displayName: 'Build and push image using docker'
+      script: |
         docker login -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
         docker build -t trihatmaja/mvcmovie:$(SHORT_SHA) .
         docker push trihatmaja/mvcmovie:$(SHORT_SHA)
-      displayName: 'Build and push image using docker'
+      
       
