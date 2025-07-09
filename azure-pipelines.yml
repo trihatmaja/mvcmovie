@@ -53,14 +53,13 @@ stages:
   - job: BuildDocker
     displayName: Build Docker
     steps:
-    - displayName: 'Install docker'
-      task: DockerInstaller@0
+    - task: DockerInstaller@0
       inputs:
         dockerVersion: '28.3.1'
-    - displayName: 'Build and push image using docker'
-      script: |
+      displayName: 'Install docker'
+    - script: |
         docker login -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
         docker build -t trihatmaja/mvcmovie:$(SHORT_SHA) .
         docker push trihatmaja/mvcmovie:$(SHORT_SHA)
-      
+      displayName: 'Build and push image using docker'
       
