@@ -20,6 +20,8 @@ stages:
   - job: BuildApp
     displayName: 'Build App'
     steps:
+    - task: MicrosoftSecurityDevOps@1
+      displayName: 'scan'
     - task: UseDotNet@2
       displayName: 'Install .NET Core'
       inputs:
