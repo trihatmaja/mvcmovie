@@ -22,6 +22,11 @@ stages:
     steps:
     - task: MicrosoftSecurityDevOps@1
       displayName: 'scan'
+      inputs: 
+        categories: 'secrets'
+        break: true
+        publish: true
+        artifactName: CodeAnalysisLogs
     - task: UseDotNet@2
       displayName: 'Install .NET Core'
       inputs:
