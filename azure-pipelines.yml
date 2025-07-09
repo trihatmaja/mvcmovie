@@ -60,10 +60,10 @@ stages:
         curl -fSL "https://github.com/genuinetools/img/releases/download/v0.5.11/img-linux-amd64" -o "/usr/local/bin/img" \
         && chmod a+x "/usr/local/bin/img"
         img -h
-      displayName: 'Install Podman Binary'
+      displayName: 'Install Img Binary'
     - script: |
-        img login index.docker.io -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
-        img build -t trihatmaja/mvcmovie:$(SHORT_SHA) .
-        img push trihatmaja/mvcmovie:$(SHORT_SHA)
-      displayName: 'Build and push image using podman'
+        docker login index.docker.io -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
+        docker build -t trihatmaja/mvcmovie:$(SHORT_SHA) .
+        docker push trihatmaja/mvcmovie:$(SHORT_SHA)
+      displayName: 'Build and push image using docker'
       
