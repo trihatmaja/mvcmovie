@@ -62,7 +62,7 @@ stages:
         img -h
       displayName: 'Install Img Binary'
     - script: |
-        docker login index.docker.io -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
+        docker login -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
         docker build -t trihatmaja/mvcmovie:$(SHORT_SHA) .
         docker push trihatmaja/mvcmovie:$(SHORT_SHA)
       displayName: 'Build and push image using docker'
