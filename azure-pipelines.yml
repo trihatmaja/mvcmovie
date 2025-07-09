@@ -47,8 +47,10 @@ stages:
       inputs:
         targetPath: $(System.DefaultWorkingDirectory)/publish-windows
         artifactName: WebApp-MvcMovie-Windows-x64
-    - task: MicrosoftSecurityDevOps@latest      
+    - task: MicrosoftSecurityDevOps@1      
       displayName: 'Microsoft Security DevOps'
+      env:
+        GDN_DEBUG_DROP: 'true'
 
 - stage: BuildDocker
   displayName: Build and push docker image
