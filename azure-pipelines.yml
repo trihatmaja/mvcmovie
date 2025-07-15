@@ -84,6 +84,8 @@ stages:
         GDN_DEBUG_DROP: 'true'
         GDN_TRIVY_VULNTYPES: 'os, library'
         GDN_TRIVY_SEVERITIES: 'CRITICAL, HIGH'
+        GDN_TRIVY_ACTION: 'image'
+        GDN_TRIVY_TARGET: 'trihatmaja/mvcmovie:$(SHORT_SHA)'
   - job: PushDocker
     dependsOn: ScanDocker
     displayName: 'Push Docker'
