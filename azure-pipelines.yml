@@ -47,8 +47,8 @@ stages:
         artifactName: WebApp-MvcMovie-Windows-x64
   - job: ScanApp
     displayName: Security Scan
-    pool:
-      vmImage: 'ubuntu-latest'
+    # pool:
+    #   vmImage: 'ubuntu-latest'
     steps:
     - task: MicrosoftSecurityDevOps@1
       displayName: 'Microsoft Security DevOps'
@@ -83,7 +83,6 @@ stages:
         tools: 'trivy'
       env:
         GDN_DEBUG_DROP: 'true'
-        GDN_TRIVY_VULNTYPES: 'os, library'
         GDN_TRIVY_SEVERITIES: 'CRITICAL, HIGH'
         GDN_TRIVY_ACTION: 'image'
         GDN_TRIVY_TARGET: 'trihatmaja/mvcmovie:$(SHORT_SHA)'
