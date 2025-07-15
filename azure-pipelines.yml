@@ -69,6 +69,7 @@ stages:
     - script: |
         docker login -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
         docker build -t trihatmaja/mvcmovie:$(SHORT_SHA) .
+        docker push trihatmaja/mvcmovie:$(SHORT_SHA)
       displayName: 'Build Docker Image'
   - job: ScanDocker
     dependsOn: BuildDocker
@@ -89,6 +90,8 @@ stages:
   - job: PushDocker
     dependsOn: ScanDocker
     displayName: 'Push Docker'
+    pool:
+      name: 'self-hosted'
     steps:
     - script: |
         docker push trihatmaja/mvcmovie:$(SHORT_SHA)
