@@ -10,8 +10,6 @@ variables:
 - group: docker-creds
 - name: SHORT_SHA
   value: $(echo $(Build.SourceVersion) | cut -c1-8)
-- name: DOCKER_BUILDKIT
-  value: 0
 
 stages:
 - stage: BuildApp
@@ -72,6 +70,8 @@ stages:
         docker login -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
         docker build -t trihatmaja/mvcmovie:$(SHORT_SHA) .
       displayName: 'Build Docker Image'
+  - job: ScanDocker
+    steps:
     - task: MicrosoftSecurityDevOps@1
       displayName: 'Microsoft Security DevOps'
       inputs:
@@ -80,6 +80,10 @@ stages:
         GDN_DEBUG_DROP: 'true'
         GDN_TRIVY_VULNTYPES: 'os, library'
         GDN_TRIVY_SEVERITIES: 'CRITICAL, HIGH'
+      pool:
+        vmImage: 'ubuntu-latest'
+  - job: PushDocker
+    steps:
     - script: |
         docker push trihatmaja/mvcmovie:$(SHORT_SHA)
       displayName: 'Push Docker Image'
