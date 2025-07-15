@@ -61,6 +61,8 @@ stages:
   jobs:
   - job: BuildDocker
     displayName: Build Docker
+    pool:
+      name: 'self-hosted'
     steps:
     - task: DockerInstaller@0
       inputs:
@@ -69,5 +71,17 @@ stages:
     - script: |
         docker login -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
         docker build -t trihatmaja/mvcmovie:$(SHORT_SHA) .
+      displayName: 'Build Docker Image'
+    - task: MicrosoftSecurityDevOps@1
+      displayName: 'Microsoft Security DevOps'
+      tools:
+        - trivy
+      inputs:
+        tools: 'trivy'
+      env:
+        GDN_DEBUG_DROP: 'true'
+        GDN_TRIVY_VULNTYPES: 'os, library'
+        GDN_TRIVY_SEVERITIES: 'CRITICAL, HIGH'
+    - script: |
         docker push trihatmaja/mvcmovie:$(SHORT_SHA)
-      displayName: 'Build and push image using docker'
+      displayName: 'Push Docker Image'

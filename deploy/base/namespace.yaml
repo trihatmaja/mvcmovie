@@ -6,3 +6,5 @@ metadata:
     name: mvcmovie
     env: poc
     pic: wicaksonotrihatmaja
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/enforce-version: "latest"
