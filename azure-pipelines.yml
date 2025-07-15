@@ -71,6 +71,7 @@ stages:
         docker build -t trihatmaja/mvcmovie:$(SHORT_SHA) .
       displayName: 'Build Docker Image'
   - job: ScanDocker
+    dependsOn: BuildDocker
     displayName: 'Scan Docker'
     pool:
       vmImage: 'ubuntu-latest'
@@ -84,6 +85,7 @@ stages:
         GDN_TRIVY_VULNTYPES: 'os, library'
         GDN_TRIVY_SEVERITIES: 'CRITICAL, HIGH'
   - job: PushDocker
+    dependsOn: ScanDocker
     displayName: 'Push Docker'
     steps:
     - script: |
