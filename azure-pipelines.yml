@@ -74,8 +74,6 @@ stages:
       displayName: 'Build Docker Image'
     - task: MicrosoftSecurityDevOps@1
       displayName: 'Microsoft Security DevOps'
-      tools:
-        - trivy
       inputs:
         tools: 'trivy'
       env:
