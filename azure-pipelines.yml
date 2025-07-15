@@ -28,14 +28,6 @@ stages:
       inputs:
         command: 'restore'
       displayName: 'dotnet restore dependency'
-    - task: MicrosoftSecurityDevOps@1      
-      displayName: 'Microsoft Security DevOps'
-      inputs:
-        tools: 'trivy'
-      env:
-        GDN_DEBUG_DROP: 'true'
-        GDN_TRIVY_VULNTYPES: 'os, library'
-        GDN_TRIVY_SEVERITIES: 'CRITICAL, HIGH'
     - task: DotNetCoreCLI@2
       inputs:
         command: 'build'
@@ -55,6 +47,14 @@ stages:
       inputs:
         targetPath: $(System.DefaultWorkingDirectory)/publish-windows
         artifactName: WebApp-MvcMovie-Windows-x64
+  - job: ScanApp
+    displayName: Security Scan
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: MicrosoftSecurityDevOps@1
+      displayName: 'Microsoft Security DevOps'
+
 
 - stage: BuildDocker
   displayName: Build and push docker image
@@ -71,4 +71,3 @@ stages:
         docker build -t trihatmaja/mvcmovie:$(SHORT_SHA) .
         docker push trihatmaja/mvcmovie:$(SHORT_SHA)
       displayName: 'Build and push image using docker'
-      
