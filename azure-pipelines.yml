@@ -47,9 +47,14 @@ stages:
         artifactName: WebApp-MvcMovie-Windows-x64
   - job: ScanApp
     displayName: Security Scan
-    # pool:
-    #   vmImage: 'ubuntu-latest'
     steps:
+    - script: |
+        apt-get update && apt-get install -y python3-pip unzip wget curl
+        pip3 install bandit checkov semgrep
+        wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.64.1_Linux-64bit.deb
+        dpkg -i trivy_0.64.1_Linux-64bit.deb
+        rm trivy_0.64.1_Linux-64bit.deb
+      displayName: Install Security Tools
     - task: MicrosoftSecurityDevOps@1
       displayName: 'Microsoft Security DevOps'
 
