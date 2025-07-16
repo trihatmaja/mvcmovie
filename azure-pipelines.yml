@@ -99,13 +99,6 @@ stages:
         tools: 'trivy'
       env:
         GDN_DEBUG_DROP: 'true'
-        GDN_TRIVY_SEVERITIES: 'CRITICAL, HIGH'
+        GDN_TRIVY_SEVERITIES: '"CRITICAL", "HIGH"'
         GDN_TRIVY_ACTION: 'image'
         GDN_TRIVY_TARGET: 'trihatmaja/mvcmovie:$(SHORT_SHA)'
-  - job: PushDocker
-    dependsOn: ScanDocker
-    displayName: 'Push Docker'
-    steps:
-    - script: |
-        docker push trihatmaja/mvcmovie:$(SHORT_SHA)
-      displayName: 'Push Docker Image'
