@@ -14,10 +14,10 @@ variables:
 stages:
 - stage: BuildApp
   displayName: 'Build App'
-  dependsOn: ScanApp
   jobs:
   - job: BuildApp
     displayName: 'Build App'
+    dependsOn: ScanApp
     steps:
     - task: UseDotNet@2
       displayName: 'Install .NET Core'
