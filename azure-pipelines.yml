@@ -63,7 +63,6 @@ stages:
     - task: MicrosoftSecurityDevOps@1
       displayName: 'Microsoft Security DevOps'
 
-
 - stage: BuildDocker
   displayName: Build and push docker image
   jobs:
@@ -100,6 +99,5 @@ stages:
         tools: 'trivy'
       env:
         GDN_DEBUG_DROP: 'true'
-        GDN_TRIVY_SEVERITIES: '"CRITICAL", "HIGH"'
         GDN_TRIVY_ACTION: 'image'
         GDN_TRIVY_TARGET: 'trihatmaja/mvcmovie:$(SHORT_SHA)'
