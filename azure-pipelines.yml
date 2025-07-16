@@ -47,6 +47,8 @@ stages:
         artifactName: WebApp-MvcMovie-Windows-x64
   - job: ScanApp
     displayName: Security Scan
+    pool:
+      name: 'self-hosted'
     steps:
     - script: |
         apt-get update && apt-get install -y python3-pip unzip wget curl
