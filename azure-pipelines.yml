@@ -4,7 +4,7 @@ trigger:
       - main
 
 pool:
-  name: 'self-hosted'
+  name: 'Default'
 
 variables:
 - group: docker-creds
@@ -14,6 +14,7 @@ variables:
 stages:
 - stage: BuildApp
   displayName: 'Build App'
+  dependsOn: ScanApp
   jobs:
   - job: BuildApp
     displayName: 'Build App'
