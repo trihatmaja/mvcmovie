@@ -76,6 +76,8 @@ stages:
     - script: |
         docker login -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
         docker build -t trihatmaja/mvcmovie:$(SHORT_SHA) .
+        docker push trihatmaja/mvcmovie:$(SHORT_SHA)
+        docker push triahtmaja/mvcmovie:latest
       displayName: 'Build Docker Image'
     - script: |
         apt-get update && apt-get install -y python3-pip unzip wget curl
@@ -95,6 +97,5 @@ stages:
       env:
         GDN_DEBUG_DROP: 'true'
         GDN_TRIVY_ACTION: 'image'
-        GDN_TRIVY_TARGET: 'trihatmaja/mvcmovie:$(SHORT_SHA)'
-    - script: |
-        docker push trihatmaja/mvcmovie:$(SHORT_SHA)
+        GDN_TRIVY_TARGET: 'trihatmaja/mvcmovie:latest'
+        
