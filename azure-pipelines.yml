@@ -77,7 +77,7 @@ stages:
         docker login -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
         docker build -t trihatmaja/mvcmovie:$(SHORT_SHA) .
         docker push trihatmaja/mvcmovie:$(SHORT_SHA)
-        docker push triahtmaja/mvcmovie:latest
+        docker push trihatmaja/mvcmovie:latest
       displayName: 'Build Docker Image'
     - script: |
         apt-get update && apt-get install -y python3-pip unzip wget curl
